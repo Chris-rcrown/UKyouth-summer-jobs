@@ -89,10 +89,10 @@ const SignIn: React.FC = () => {
   const isValid = Object.values(errors).every((e) => !e);
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className=" overflow-hidden">
       <div className="flex flex-col md:flex-row h-full">
         {/* Left panel */}
-        <Layout className="w-1/2" />
+        <Layout className="md:w-1/2 " />
 
         {/* Right panel */}
         <div className="flex-1 bg-white flex flex-col px-4 py-6">

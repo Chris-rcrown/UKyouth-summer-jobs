@@ -8,6 +8,7 @@ import './App.css'
 import ForgotPassword from './authentication-pages/forgotPassword';
 import CreatePassword from './authentication-pages/createPassword';
 import PswdSuccess from './authentication-pages/passwordUpdateSuccess';
+import Profile from './pages/profile';
 
 function App() {
 
@@ -24,6 +25,8 @@ function App() {
          <Route path='/onboarding' element={<Onboarding/>}/>
          <Route path='/success' element={<Success/>}  />
          <Route path='/pswdchange' element= {<PswdSuccess/>} />
+
+         <Route path='/profile' element = {<Profile/>} />
          </Routes>
       </BrowserRouter>  
     

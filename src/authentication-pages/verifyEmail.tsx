@@ -24,7 +24,7 @@ const Verification: React.FC = () => {
   return (
     <div className="h-screen overflow-hidden">
       <div className="flex flex-col md:flex-row h-full">
-        <Layout className="w-1/2" />
+        <Layout className="md:w-1/2" />
         <div className="flex-1 bg-white flex flex-col px-4 py-6">
           <p className="text-xs text-right mb-12 md:mb-0">
             Having trouble signing in?{" "}

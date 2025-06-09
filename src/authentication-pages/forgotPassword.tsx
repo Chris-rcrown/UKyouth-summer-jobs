@@ -10,13 +10,13 @@ const ForgotPassword: React.FC = () => {
         navigate('/verify-email', { state: {flow: 'reset'}});
     }
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-[100vh] overflow-hidden">
       <div className="flex flex-col md:flex-row h-full">
         {/* Left panel */}
-        <Layout className="w-1/2"/>
+        <Layout className="md:w-1/2"/>
         
         {/* Right panel */}
-        <div className="flex-1 bg-white flex flex-col px-4 py-6">
+        <div className="md:w-1/2 flex-1 bg-white flex flex-col px-4 py-6">
           {/* Top support link */}
           <p className="text-xs text-right mb-12 md:mb-0">
             Having trouble signing in?{" "}
