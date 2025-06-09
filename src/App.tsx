@@ -8,7 +8,12 @@ import './App.css'
 import ForgotPassword from './authentication-pages/forgotPassword';
 import CreatePassword from './authentication-pages/createPassword';
 import PswdSuccess from './authentication-pages/passwordUpdateSuccess';
+import Overview from './pages/overview';
+import ReferralRecords from './pages/referrer-records';
+import RegistrationRecords from './pages/registration-record';
+import UserMangement from './pages/user-mangement';
 import Profile from './pages/profile';
+import StaffRecords from './pages/staff-records';
 
 function App() {
 
@@ -25,8 +30,13 @@ function App() {
          <Route path='/onboarding' element={<Onboarding/>}/>
          <Route path='/success' element={<Success/>}  />
          <Route path='/pswdchange' element= {<PswdSuccess/>} />
-
+        <Route path='/overview' element={<Overview/> } />
+        <Route path='/referrer-records' element={<ReferralRecords/>} />
+        <Route path='/registration-records' element={<RegistrationRecords/>} />
+        <Route path='/user-management' element={<UserMangement/>} />  
          <Route path='/profile' element = {<Profile/>} />
+         <Route path='/staff-record' element={<StaffRecords/>} />
+          <Route path='*' element={<h1>Page not found</h1>} />
          </Routes>
       </BrowserRouter>  
     
