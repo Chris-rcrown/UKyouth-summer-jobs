@@ -1,9 +1,16 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Layout from '../components/auth-layout';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const PswdSuccess: React.FC = () => {
- 
+  const navigate = useNavigate();
+
+  useEffect(()=>{
+    const timer = setTimeout(()=>{
+      navigate('/sign-in', {replace: true})
+    }, 3000)
+    return ()=> clearTimeout(timer)
+  },[navigate])
   return (
     <div className="h-screen overflow-hidden">
       <div className="flex flex-col md:flex-row h-full">
