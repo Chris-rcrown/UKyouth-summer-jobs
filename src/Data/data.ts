@@ -175,7 +175,6 @@ export const areaData: Area[] = [
                 name: 'Sport 4 Life UK',
                 value: 'Sport4Life',
                 boroughs: [
-                    { label: 'Birmingham', value: 'Birmingham' },
                     { label: 'Sandwell', value: 'Sandwell' },
                     { label: 'Solihull', value: 'Solihull' }
                 ]
