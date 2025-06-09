@@ -41,7 +41,8 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         />
                     )}
                 </div>
-                <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:relative inset-y-0 left-0 z-40 w-[60vw] max-w-[252px] md:w-1/4 lg:w-1/7 bg-[#12BAE3] flex flex-col p-4 transform transition-transform duration-300 ease-in-out`}>
+                <aside className={`${sidebarOpen ? 'translate-x-0' : '-translate-x-full'} lg:translate-x-0 fixed lg:fixed inset-y-0 left-0 z-40 w-[60vw] max-w-[252px] md:w-1/4 lg:w-1/7 bg-[#12BAE3] flex flex-col p-4 transform transition-transform duration-300 ease-in-out`}
+                    style={{ height: '100vh', top: 0 }}>
                     <div className=" flex flex-row-reverse items-center justify-center mb-1" >
                         {/* <span className=' text-white font-bold text-lg'> Menu</span> */}
                         <button onClick ={()=> setSidebarOpen(false)} className='absolute top-1 right-1 lg:hidden'>
@@ -49,18 +50,18 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                 <path strokeLinecap='round'strokeLinejoin='round'strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                             </svg>
                         </button>
-                    <button
-                        type="button"
-                        className="flex-shrink-0  cursor-pointer focus:outline-none"
-                        onClick={() => setSidebarOpen(!sidebarOpen)}
-                        aria-label="Toggle sidebar"
-                    >
-                        <img
-                            src="/White SJP logo 2.svg"
-                            alt="summer-jobs logo"
-                            className="w-40 md:w-64 h-24 mb-6 object-contain"
-                        />
-                    </button>
+                        <button
+                            type="button"
+                            className="flex-shrink-0  cursor-pointer focus:outline-none"
+                            onClick={() => setSidebarOpen(!sidebarOpen)}
+                            aria-label="Toggle sidebar"
+                        >
+                            <img
+                                src="/White SJP logo 2.svg"
+                                alt="summer-jobs logo"
+                                className="w-40 md:w-64 h-24 mb-6 object-contain"
+                            />
+                        </button>
                     </div>
 
                     <nav className="flex-1 flex flex-col justify-between">
@@ -142,7 +143,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                 {/* Main content */}
                 <main className="flex-1 bg-white">
                     {/* Header */}
-                    <header className="flex items-center justify-between  w-full bg-white p-6 border-b shadow-md">
+                    <header className="fixed top-0 left-0 right-0 z-30 flex items-center justify-between w-full bg-white p-6 border-b border-gray-300  shadow-md">
                         <div className='lg:hidden flex items-center '>
                             <button className=' mr-4' onClick={() => setSidebarOpen(true)}>
                                 <svg className='w-6 text-gray-700' fill='none'stroke='currentColor 'viewBox='0 0 24 24' >
@@ -150,21 +151,22 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                                 </svg>
                             </button>
                         </div>
-                    <h1 className="text-2xl font-bold text-gray-800">{pageName}</h1>
-                    <div className="flex flex-col md:flex-row items-center space-x-4">
-                        {/* <img src="/material-symbols_notifications.svg" alt="notifications icon" className="w-6 h-6" /> */}
-                        <img src="/Avatar-Light.svg " alt="profile icon" className="w-6 md:w-15 md:h-12" />
-                        {/* <button className="text-gray-700 hover:text-blue-500 focus:outline-none">
-                            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                            </svg>
-                        </button> */}
+                        <h1 className="text-2xl font-bold text-gray-800 relative lg:left-70">{pageName}</h1>
+                        <div className="flex flex-col md:flex-row items-center mr-4">
+                            {/* <img src="/material-symbols_notifications.svg" alt="notifications icon" className="w-6 h-6" /> */}
+                            <img src="/Avatar-Light.svg " alt="profile icon" className="w-6 md:w-15 md:h-12" />
+                            {/* <button className="text-gray-700 hover:text-blue-500 focus:outline-none">
+                                <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                                </svg>
+                            </button> */}
                             <div className='hidden md:block' >
-                            <p className="text-black font-semibold text-md md:text-lg">{UserName}</p>
-                            <p className = 'text-sm md:text-md text-gray-400'>{UserRrole}</p>
+                                <p className="text-black font-semibold text-md md:text-lg">{UserName}</p>
+                                <p className = 'text-sm md:text-md text-gray-400'>{UserRrole}</p>
                             </div>
-                    </div>
+                        </div>
                     </header>
+                    <div className="h-[88px] lg:h-[88px]" /> {/* Spacer to offset fixed header height */}
 
                     {/* Content area */}
                     <section className="p-6">
@@ -178,7 +180,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                             </button>
                 )} </div>
                     {/* Place for nested content */}
-                    <div>
+                    <div className='relative lg:left-70 lg:max-w-[1500px] flex justify-center items-center'>
                         {children}
                     </div>
                     </section>
