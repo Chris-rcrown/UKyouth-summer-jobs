@@ -10,23 +10,23 @@ type FormValues = {
   terms: boolean;
 };
 
-type FormErrors = Record<keyof FormValues, string>;
+type FormErrors = Record<keyof Omit<FormValues, "terms">, string>;
+
 type Touched = Record<keyof FormValues, boolean>;
 
-// 1. Define per-field validator functions
+// Field-level validators
 const validators: {
-  [K in keyof FormValues]: (value: FormValues[K], allValues?: FormValues) => string;
+  [K in keyof Omit<FormValues, "terms">]: (v: FormValues[K]) => string;
 } = {
-  name: (v) => (v.trim() ? "" : "Full name is required"),
-  email: (v) => {
+  name: (v: string) => (v.trim() ? "" : "Full name is required"),
+  email: (v: string) => {
     if (!v.trim()) return "Email is required";
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
       ? ""
       : "Please enter a valid email address";
   },
-  password: (v) =>
+  password: (v: string) =>
     v.length >= 8 ? "" : "Password must be at least 8 characters",
-  terms: (v) => (v ? "" : "You must agree to the terms"),
 };
 
 const SignUp: React.FC = () => {
@@ -38,12 +38,14 @@ const SignUp: React.FC = () => {
     password: "",
     terms: false,
   });
+
   const [errors, setErrors] = React.useState<FormErrors>({
     name: "",
     email: "",
     password: "",
-    terms: "",
   });
+
+  const [termsError, setTermsError] = React.useState<string>("");
   const [touched, setTouched] = React.useState<Touched>({
     name: false,
     email: false,
@@ -51,62 +53,96 @@ const SignUp: React.FC = () => {
     terms: false,
   });
 
-  // 2. Validate a single field
-  const validateField = <K extends keyof FormValues>(field: K, value: FormValues[K]) => {
-    const error = validators[field](value, form);
-    setErrors((e) => ({ ...e, [field]: error }));
+  const validateField = <K extends keyof Omit<FormValues, "terms">>(
+    field: K,
+    value: FormValues[K]
+  ) => {
+    const validator = validators[field];
+    const error = validator(value);
+    setErrors((prev) => ({ ...prev, [field]: error }));
     return error;
   };
 
-  // 3. Validate all fields
-  const validateForm = () => {
-    const newErrors = (Object.keys(validators) as (keyof FormValues)[]).reduce((acc, key) => {
-      acc[key] = validators[key](form[key], form);
-      return acc;
-    }, {
-      name: "",
-      email: "",
-      password: "",
-      terms: ""
-    } as FormErrors);
-    setErrors(newErrors);
-    return Object.values(newErrors).every((e) => !e);
+  const validateTerms = (value: boolean) => {
+    const error = value ? "" : "You must agree to the terms";
+    setTermsError(error);
+    return error;
   };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>
-  ) => {
+  const validateForm = () => {
+    const newErrors: FormErrors = {
+      name: validators.name(form.name),
+      email: validators.email(form.email),
+      password: validators.password(form.password),
+    };
+
+    setErrors(newErrors);
+    const termsValid = !validateTerms(form.terms);
+
+    return Object.values(newErrors).every((e) => !e) && termsValid;
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, type, checked, value } = e.target;
     const field = id as keyof FormValues;
     const fieldValue = type === "checkbox" ? checked : value;
 
-    setForm((f) => ({ ...f, [field]: fieldValue }));
+    setForm((prev) => ({ ...prev, [field]: fieldValue }));
 
-    // 4. If user has already touched this field, re-validate on change
     if (touched[field]) {
-      validateField(field, fieldValue);
+      if (field === "terms") {
+        validateTerms(fieldValue as boolean);
+      } else if (typeof fieldValue === "string") {
+        validateField(field, fieldValue);
+      }
     }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
     const field = e.target.id as keyof FormValues;
-    setTouched((t) => ({ ...t, [field]: true }));
-    validateField(field, form[field]);
+    setTouched((prev) => ({ ...prev, [field]: true }));
+
+    if (field === "terms") {
+      validateTerms(form.terms);
+    } else {
+      validateField(field, form[field]);
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // mark all as touched
-    setTouched(Object.keys(touched).reduce((t, k) => ({ ...t, [k]: true }), {} as Touched));
+    // Mark all fields as touched
+    // Mark all fields as touched so their errors show
+    const allTouched = Object.keys(form).reduce((acc, key) => {
+      acc[key as keyof FormValues] = true;
+      return acc;
+    }, {} as Touched);
 
-    // full form validation
-    if (validateForm()) {
-      navigate('/verify-email', {state: {flow: 'signup'}});
-    }
+    setTouched(allTouched);
+
+    // Show validation messages for all fields
+    setErrors({
+      name: validators.name(form.name),
+      email: validators.email(form.email),
+      password: validators.password(form.password),
+    });
+    setTermsError(form.terms ? "" : "You must agree to the terms");
+
+    setTouched(allTouched);
+
+    // Validate all fields and show errors if any
+    const isFormValid = validateForm();
+
+    // If not valid, do not proceed
+    if (!isFormValid) return;
+
+    navigate("/verify-email", { state: { flow: "signup" } });
   };
 
-  // 5. Determine if form is valid (no errors)
-  const isValid = Object.values(errors).every((e) => !e);
+  const isValid =
+    Object.values(errors).every((e) => !e) &&
+    !termsError &&
+    Object.values(touched).every((t) => t);
 
   return (
     <div className="overflow-hidden">
@@ -131,7 +167,7 @@ const SignUp: React.FC = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-3">
-                {/** Name */}
+                {/* Name */}
                 <div className="flex flex-col">
                   <label htmlFor="name" className="text-xs mb-2">
                     Full Name
@@ -146,13 +182,11 @@ const SignUp: React.FC = () => {
                     onBlur={handleBlur}
                   />
                   {touched.name && errors.name && (
-                    <span className="text-red-500 text-xs">
-                      {errors.name}
-                    </span>
+                    <span className="text-red-500 text-xs">{errors.name}</span>
                   )}
                 </div>
 
-                {/** Email */}
+                {/* Email */}
                 <div className="flex flex-col">
                   <label htmlFor="email" className="text-xs mb-2">
                     Email
@@ -167,13 +201,11 @@ const SignUp: React.FC = () => {
                     onBlur={handleBlur}
                   />
                   {touched.email && errors.email && (
-                    <span className="text-red-500 text-xs">
-                      {errors.email}
-                    </span>
+                    <span className="text-red-500 text-xs">{errors.email}</span>
                   )}
                 </div>
 
-                {/** Password */}
+                {/* Password */}
                 <div className="flex flex-col">
                   <label htmlFor="password" className="text-xs mb-2">
                     Password
@@ -194,44 +226,37 @@ const SignUp: React.FC = () => {
                   )}
                 </div>
 
-                {/** Terms */}
+                {/* Terms */}
                 <div>
                   <label className="flex items-start text-[14px] leading-[24px] text-[#858C94]">
                     <input
                       id="terms"
                       type="checkbox"
-                      className="mt-1 mr-2"
+                      className="mt-1 mr-2 cursor-pointer"
                       checked={form.terms}
                       onChange={handleChange}
                       onBlur={handleBlur}
-                    /> <p className="flex-1/2 text-xs">
-                    By clicking on{" "}
-                    <span className="font-semibold text-[#333]">
-                      Get Started
-                    </span>{" "}
-                    you agree to the terms of service and privacy policy.</p>
+                    />
+                    <p className="text-xs">
+                      By clicking on{" "}
+                      <span className="font-semibold text-[#333]">
+                        Get Started
+                      </span>{" "}
+                      you agree to the terms of service and privacy policy.
+                    </p>
                   </label>
-                  {touched.terms && errors.terms && (
-                    <span className="text-red-500 text-xs">
-                      {errors.terms}
-                    </span>
+                  {touched.terms && termsError && (
+                    <span className="text-red-500 text-xs">{termsError}</span>
                   )}
                 </div>
 
-                {/** Submit */}
-                <Button
-                  text="Get Started"
-                  onClick={handleSubmit}
-                  disabled={!isValid}
-                />
+                {/* Submit */}
+                <Button text="Get Started" onClick={handleSubmit} disabled={!isValid} />
 
-                {/** Sign in link */}
+                {/* Sign-in link */}
                 <p className="text-center text-xs">
                   Already have an account?{" "}
-                  <Link
-                    to="/sign-in"
-                    className="text-[#12BAE3] cursor-pointer"
-                  >
+                  <Link to="/sign-in" className="text-[#12BAE3] cursor-pointer">
                     Sign in
                   </Link>
                 </p>
