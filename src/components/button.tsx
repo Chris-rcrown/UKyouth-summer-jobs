@@ -12,7 +12,7 @@ const Button: React.FC<ButtonProps> = ({ text, className, onClick, disabled }) =
         <div>
             <button
                 type="submit"
-                className={`w-full bg-[#12BAE3] text-white font-semibold py-2 text-sm rounded cursor-pointer ${className ?? null}`}
+                className={`w-full bg-[#12BAE3] text-white font-semibold py-3 px-4 text-sm rounded cursor-pointer hover:bg-[#4dcbeb] hover:scale-[1.01] transition-all ${className ?? null}`}
                 onClick={onClick}
                 disabled={disabled}
             >
