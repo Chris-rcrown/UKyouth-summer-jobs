@@ -1,23 +1,28 @@
-import React from "react";
-import { useNavigate, useLocation, Link } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useNavigate, useSearchParams, Link } from "react-router-dom";
 import Layout from "../components/auth-layout";
 import Button from "../components/button";
 
-type LocationState = {
-  flow?: 'signup' | 'reset';
-};
 
 const Verification: React.FC = () => {
   const navigate = useNavigate();
-  const { state } = useLocation() as { state: LocationState };
+  const [searchParams] = useSearchParams();
+  // Try reading from state; default to signup if missing
+  const flow = searchParams.get("flow");
+
+  // If user navigates here directly (no state), redirect back to start
+  useEffect(() => {
+    if (flow !== "reset" && flow !== "signup") {
+      // Force them to the signup start rather than leaving them stuck
+      navigate("/", { replace: true });
+    }
+  }, [flow, navigate]);
 
   const handleVerify = () => {
-    if (state?.flow === 'reset') {
-      // came from Forgot‑Password → go to Create New Password
-      navigate('/create-password');
+    if (flow === "reset") {
+      navigate("/create-password", { replace: true });
     } else {
-      // default (or flow==='signup'): go to Onboarding
-      navigate('/onboarding');
+      navigate("/onboarding", { replace: true });
     }
   };
 
@@ -33,43 +38,39 @@ const Verification: React.FC = () => {
             </Link>
           </p>
           <div className="flex-1 flex flex-col justify-center items-center">
-            <form onSubmit={e => {
-              e.preventDefault();
-              handleVerify();
-            }}
-            className="w-full max-w-sm space-y-6" noValidate>
+            <div
+              className="w-full max-w-sm space-y-6"
+            >
               <div>
                 <h2 className="text-lg font-bold">Verify Email Address</h2>
                 <p className="text-gray-500 text-xs">
-                  {state?.flow === 'reset'
-                  ? 'Enter the code we sent to reset your password'
-                  : 'Enter the code we sent to verify your email'}
+                  {flow === "reset"
+                    ? "Enter the code we sent to reset your password"
+                    : "Enter the code we sent to verify your email"}
                 </p>
               </div>
               <div className="flex flex-col">
-                <label htmlFor="verification-1" className="text-xs mb-3">
+                <label htmlFor="verification-0" className="text-xs mb-3">
                   Verification Code
                 </label>
                 <div className="flex gap-2 justify-center">
-                  {[0,1,2,3,4,5].map(i => (
+                  {["A", "B", "C", "D", "E", "F"].map((char, i) => (
                     <input
-                      key={i}
+                      key={`verification-${char}`}
                       type="text"
                       maxLength={1}
-                      className="border border-gray-400 rounded w-10 h-10 text-center text-sm"
                       id={`verification-${i}`}
+                      className="border border-gray-400 rounded w-10 h-10 text-center text-sm"
                     />
                   ))}
                 </div>
               </div>
               <p className="text-center text-xs mb-6">
                 Didn’t receive a code?{" "}
-                <span className="text-[#12BAE3] cursor-pointer">
-                  Resend code
-                </span>
+                <span className="text-[#12BAE3] cursor-pointer">Resend code</span>
               </p>
-              <Button text="Verify email" onClick={handleVerify} />
-            </form>
+              <Button text="Verify email" onClick={handleVerify} type="button" />
+            </div>
           </div>
         </div>
       </div>

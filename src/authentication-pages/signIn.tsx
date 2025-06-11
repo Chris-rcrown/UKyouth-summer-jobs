@@ -166,7 +166,7 @@ const SignIn: React.FC = () => {
                 </div>
 
                 {/* Submit */}
-                <Button text="Login" onClick={handleSubmit} disabled={!isValid} />
+                <Button text="Login" type="submit" disabled={!isValid} />
 
                 {/* Sign up link */}
                 <p className="text-center text-xs text-gray-500">

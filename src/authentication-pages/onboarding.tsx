@@ -163,6 +163,7 @@ const Onboarding: React.FC = () => {
               {/* Continue Button */}
               <Button
                 text="Continue"
+                type="submit"
                 disabled={!selectedArea || !selectedBorough}
               />
             </form>
