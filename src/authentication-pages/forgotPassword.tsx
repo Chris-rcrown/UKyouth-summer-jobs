@@ -6,8 +6,11 @@ import { Link, useNavigate } from 'react-router-dom';
 const ForgotPassword: React.FC = () => {
     const navigate = useNavigate()
 
-    const HandleNext = ()=> {
-        navigate('/verify-email', { state: {flow: 'reset'}});
+    const HandleNext = async()=> {
+        navigate(
+          {pathname: "/verify-email", search: "?flow=reset"},
+          {replace: true}
+        );
     }
   return (
     <div className="h-[100vh] overflow-hidden">
@@ -53,7 +56,7 @@ const ForgotPassword: React.FC = () => {
                 
                 {/* Submit */}
 
-                <Button text="Continue" onClick={HandleNext}/>
+                <Button text="Continue" onClick={HandleNext} type="button"/>
                 
               </form>
             </div>

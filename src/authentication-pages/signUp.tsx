@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Button from "../components/button";
 import { Link, useNavigate } from "react-router-dom";
 import Layout from "../components/auth-layout";
@@ -10,62 +10,46 @@ type FormValues = {
   terms: boolean;
 };
 
-type FormErrors = Record<keyof Omit<FormValues, "terms">, string>;
+type FormErrors = Record<keyof FormValues, string>;
 
-type Touched = Record<keyof FormValues, boolean>;
-
-// Field-level validators
-const validators: {
-  [K in keyof Omit<FormValues, "terms">]: (v: FormValues[K]) => string;
-} = {
-  name: (v: string) => (v.trim() ? "" : "Full name is required"),
+const validators: { [K in Exclude<keyof FormValues, 'terms'>]: (v: string) => string } = {
+  name: (v: string) => (v.trim() ? '' : 'Full name is required'),
   email: (v: string) => {
-    if (!v.trim()) return "Email is required";
+    if (!v.trim()) return 'Email is required';
     return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v)
-      ? ""
-      : "Please enter a valid email address";
+      ? ''
+      : 'Please enter a valid email address';
   },
   password: (v: string) =>
-    v.length >= 8 ? "" : "Password must be at least 8 characters",
+    v.length >= 8 ? '' : 'Password must be at least 8 characters',
 };
 
 const SignUp: React.FC = () => {
   const navigate = useNavigate();
-
-  const [form, setForm] = React.useState<FormValues>({
-    name: "",
-    email: "",
-    password: "",
+  const [form, setForm] = useState<FormValues>({
+    name: '',
+    email: '',
+    password: '',
     terms: false,
   });
-
-  const [errors, setErrors] = React.useState<FormErrors>({
-    name: "",
-    email: "",
-    password: "",
+  const [errors, setErrors] = useState<FormErrors>({
+    name: '',
+    email: '',
+    password: '',
+    terms: ''
   });
+  const [touched, setTouched] = useState<Record<string, boolean>>({});
+  const [submitted, setSubmitted] = useState(false);
 
-  const [termsError, setTermsError] = React.useState<string>("");
-  const [touched, setTouched] = React.useState<Touched>({
-    name: false,
-    email: false,
-    password: false,
-    terms: false,
-  });
-
-  const validateField = <K extends keyof Omit<FormValues, "terms">>(
-    field: K,
-    value: FormValues[K]
-  ) => {
-    const validator = validators[field];
-    const error = validator(value);
+  const validateField = <K extends keyof Omit<FormValues, 'terms'>>(field: K, value: FormValues[K]) => {
+    const error = validators[field](value);
     setErrors((prev) => ({ ...prev, [field]: error }));
     return error;
   };
 
   const validateTerms = (value: boolean) => {
-    const error = value ? "" : "You must agree to the terms";
-    setTermsError(error);
+    const error = value ? '' : 'You must agree to the terms';
+    setErrors((prev) => ({ ...prev, terms: error }));
     return error;
   };
 
@@ -74,189 +58,150 @@ const SignUp: React.FC = () => {
       name: validators.name(form.name),
       email: validators.email(form.email),
       password: validators.password(form.password),
+      terms: '',
     };
-
+    newErrors.terms = validateTerms(form.terms);
     setErrors(newErrors);
-    const termsValid = !validateTerms(form.terms);
-
-    return Object.values(newErrors).every((e) => !e) && termsValid;
+    return Object.values(newErrors).every((e) => !e);
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, type, checked, value } = e.target;
-    const field = id as keyof FormValues;
-    const fieldValue = type === "checkbox" ? checked : value;
-
-    setForm((prev) => ({ ...prev, [field]: fieldValue }));
-
-    if (touched[field]) {
-      if (field === "terms") {
-        validateTerms(fieldValue as boolean);
-      } else if (typeof fieldValue === "string") {
-        validateField(field, fieldValue);
-      }
+    setForm((prev) => ({ ...prev, [id]: type === 'checkbox' ? checked : value }));
+    if (touched[id]) {
+      if (id === 'terms') validateTerms(checked);
+      else validateField(id as keyof Omit<FormValues, 'terms'>, value);
     }
   };
 
   const handleBlur = (e: React.FocusEvent<HTMLInputElement>) => {
-    const field = e.target.id as keyof FormValues;
-    setTouched((prev) => ({ ...prev, [field]: true }));
-
-    if (field === "terms") {
-      validateTerms(form.terms);
-    } else {
-      validateField(field, form[field]);
-    }
+    const { id } = e.target;
+    setTouched((prev) => ({ ...prev, [id]: true }));
+    if (id === 'terms') validateTerms(form.terms);
+    else validateField(id as keyof Omit<FormValues, 'terms'>, form[id as keyof FormValues] as string);
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    setSubmitted(true);
     // Mark all fields as touched
-    // Mark all fields as touched so their errors show
-    const allTouched = Object.keys(form).reduce((acc, key) => {
-      acc[key as keyof FormValues] = true;
-      return acc;
-    }, {} as Touched);
-
+    const allTouched = Object.keys(form).reduce((acc, key) => ({ ...acc, [key]: true }), {});
     setTouched(allTouched);
 
-    // Show validation messages for all fields
-    setErrors({
-      name: validators.name(form.name),
-      email: validators.email(form.email),
-      password: validators.password(form.password),
-    });
-    setTermsError(form.terms ? "" : "You must agree to the terms");
-
-    setTouched(allTouched);
-
-    // Validate all fields and show errors if any
-    const isFormValid = validateForm();
-
-    // If not valid, do not proceed
-    if (!isFormValid) return;
-
-    navigate("/verify-email", { state: { flow: "signup" } });
+    if (validateForm()) {
+      navigate(
+        {pathname:'/verify-email', search : '?flow=signup'},
+        { replace: true });
+    }else {
+      console.log('Form validation failed:', errors);
+      // If validation fails, scroll to the first error
+      const firstErrorField = Object.keys(errors).find((key) => errors[key as keyof FormErrors]);
+      if (firstErrorField) {
+        const element = document.getElementById(firstErrorField);
+        if (element) {
+          element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
+      }
+    }
   };
 
-  const isValid =
-    Object.values(errors).every((e) => !e) &&
-    !termsError &&
-    Object.values(touched).every((t) => t);
+  const showError = (field: keyof FormErrors) => submitted || touched[field as string];
 
   return (
     <div className="overflow-hidden">
       <div className="flex flex-col md:flex-row h-full">
         <Layout className="md:w-1/2" />
-
         <div className="flex-1 bg-white flex flex-col px-4 py-6">
           <p className="text-xs text-right mb-12 md:mb-0">
-            Having trouble signing in?{" "}
+            Having trouble signing in?{' '}
             <Link to="/support" className="font-semibold text-[#12BAE3]">
               Contact Support
             </Link>
           </p>
-
           <div className="flex-1 flex flex-col justify-center items-center">
             <div className="w-full max-w-sm space-y-4">
-              <div>
-                <h2 className="text-lg font-bold">Create an Account</h2>
-                <p className="text-gray-500 text-xs">
-                  Get started with the summer job programme
-                </p>
-              </div>
-
-              <form onSubmit={handleSubmit} className="space-y-3">
+              <h2 className="text-lg font-bold">Create an Account</h2>
+              <p className="text-gray-500 text-xs">
+                Get started with the summer job programme
+              </p>
+              <form onSubmit={handleSubmit} noValidate className="space-y-3">
                 {/* Name */}
-                <div className="flex flex-col">
-                  <label htmlFor="name" className="text-xs mb-2">
+                <div>
+                  <label htmlFor="name" className="text-xs mb-1 block">
                     Full Name
                   </label>
                   <input
                     id="name"
                     type="text"
-                    placeholder="Enter full name"
-                    className="border border-gray-400 rounded px-4 py-3 text-sm"
                     value={form.name}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    className="border px-3 py-2 rounded w-full"
+                    placeholder="Enter full name"
                   />
-                  {touched.name && errors.name && (
+                  {showError('name') && errors.name && (
                     <span className="text-red-500 text-xs">{errors.name}</span>
                   )}
                 </div>
-
                 {/* Email */}
-                <div className="flex flex-col">
-                  <label htmlFor="email" className="text-xs mb-2">
+                <div>
+                  <label htmlFor="email" className="text-xs mb-1 block">
                     Email
                   </label>
                   <input
                     id="email"
                     type="email"
-                    placeholder="Enter email"
-                    className="border border-gray-400 rounded px-4 py-3 text-sm"
                     value={form.email}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    className="border px-3 py-2 rounded w-full"
+                    placeholder="Enter email"
                   />
-                  {touched.email && errors.email && (
+                  {showError('email') && errors.email && (
                     <span className="text-red-500 text-xs">{errors.email}</span>
                   )}
                 </div>
-
                 {/* Password */}
-                <div className="flex flex-col">
-                  <label htmlFor="password" className="text-xs mb-2">
+                <div>
+                  <label htmlFor="password" className="text-xs mb-1 block">
                     Password
                   </label>
                   <input
                     id="password"
                     type="password"
-                    placeholder="Enter password"
-                    className="border border-gray-400 rounded px-4 py-3 text-sm"
                     value={form.password}
                     onChange={handleChange}
                     onBlur={handleBlur}
+                    className="border px-3 py-2 rounded w-full"
+                    placeholder="Enter password"
                   />
-                  {touched.password && errors.password && (
-                    <span className="text-red-500 text-xs">
-                      {errors.password}
-                    </span>
+                  {showError('password') && errors.password && (
+                    <span className="text-red-500 text-xs">{errors.password}</span>
                   )}
                 </div>
-
                 {/* Terms */}
                 <div>
-                  <label className="flex items-start text-[14px] leading-[24px] text-[#858C94]">
+                  <label className="flex items-center text-xs">
                     <input
                       id="terms"
                       type="checkbox"
-                      className="mt-1 mr-2 cursor-pointer"
                       checked={form.terms}
                       onChange={handleChange}
                       onBlur={handleBlur}
+                      className="mr-2"
                     />
-                    <p className="text-xs">
-                      By clicking on{" "}
-                      <span className="font-semibold text-[#333]">
-                        Get Started
-                      </span>{" "}
-                      you agree to the terms of service and privacy policy.
-                    </p>
+                    <p>By clicking on {" "} <span className="font-semibold">Get Started</span> {" "} you agree to our terms.</p>
                   </label>
-                  {touched.terms && termsError && (
-                    <span className="text-red-500 text-xs">{termsError}</span>
+                  {showError('terms') && errors.terms && (
+                    <span className="text-red-500 text-xs">{errors.terms}</span>
                   )}
                 </div>
-
                 {/* Submit */}
-                <Button text="Get Started" onClick={handleSubmit} disabled={!isValid} />
-
-                {/* Sign-in link */}
+                <Button text="Get Started" type="submit" disabled={!Object.values(errors).every(e => !e)} onClick={handleSubmit} />
+                {/* Sign in link */}
                 <p className="text-center text-xs">
-                  Already have an account?{" "}
-                  <Link to="/sign-in" className="text-[#12BAE3] cursor-pointer">
+                  Already have an account?{' '}
+                  <Link to="/sign-in" className="text-[#12BAE3]">
                     Sign in
                   </Link>
                 </p>

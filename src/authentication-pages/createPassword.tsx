@@ -72,7 +72,7 @@ const CreatePassword: React.FC = () => {
     e.preventDefault();
     setTouched({ password: true, confirm: true });
     if (validateForm()) {
-      navigate('/verify-email');
+      navigate('/pswdchange');
     }
   };
 
@@ -136,7 +136,7 @@ const CreatePassword: React.FC = () => {
               </div>
 
               {/* Continue */}
-              <Button text="Continue" disabled={!isValid} />
+              <Button text="Continue" disabled={!isValid} type='submit'/>
             </form>
           </div>
         </div>
