@@ -4,6 +4,7 @@ interface ButtonProps {
     text: string;
     className?: string;
     onClick?: (event: React.MouseEvent<HTMLButtonElement>) => void; // Add onClick prop
+    type: "button" | "submit" | "reset";
     disabled?: boolean;
 }
 
@@ -14,11 +15,11 @@ interface FooterNavigationProps {
     className?: string;
 }
 
-const Button: React.FC<ButtonProps> = ({ text, className, onClick, disabled }) => {
+const Button: React.FC<ButtonProps> = ({ text, className, onClick, type, disabled }) => {
     return (
         <div>
             <button
-                type="submit"
+                type={type}
                 className={`w-full bg-[#12BAE3] text-white font-semibold py-3 px-4 text-sm rounded cursor-pointer hover:bg-[#4dcbeb] hover:scale-[1.01] transition-all ${className ?? null}`}
                 onClick={onClick}
                 disabled={disabled}
