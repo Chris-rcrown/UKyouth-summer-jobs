@@ -7,6 +7,7 @@ pageName: string;
 ldp?: string;
 showRegister?: boolean;
 children?: ReactNode;
+className?: string;
 }
 const UserName = localStorage.getItem('UserName') || 'User';
 const UserRrole = localStorage.getItem('UseRrole') || 'Role';
