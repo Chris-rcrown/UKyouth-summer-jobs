@@ -7,7 +7,7 @@ import { FooterNavigation } from '../../components/button';
 const ReferralRecords: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [currentPage, setCurrentPage] = useState(1);
-  const [dropdownOpenId, setDropdownOpen] = useState<number | null>(null);
+  const [dropdownOpenId, setDropdownOpenId] = useState<number | null>(null);
   const itemsPerPage = 10;
 
  
@@ -29,7 +29,7 @@ const ReferralRecords: React.FC = () => {
 
     <div className="p-6 bg-gray-100 min-h-screen w-full">
       <div className="flex justify-between items-center mb-4">
-        <h2 className="text-lg  text-gray-700 capitalize">total no. of referrals ({referrals.length})</h2>
+        <h2 className="text-lg  text-gray-700 capitalize">total no. of registrants ({referrals.length})</h2>
         <div className="flex items-center space-x-3">
           <div className="relative">
             <input
@@ -69,9 +69,9 @@ const ReferralRecords: React.FC = () => {
             <th className="py-3 px-4 border-dashed border-blue-500">S/N</th>
             <th className="py-3 px-4 border-dashed border-blue-500 ">full name</th>
             <th className="py-3 px-4 border-dashed border-blue-500  ">location</th>
-            <th className="py-3 px-4 border-dashed border-blue-500 ">referral dates</th>
-            <th className="py-3 px-4 border-dashed border-blue-500 ">gender</th>
-            <th className="py-3 px-4 border-dashed border-blue-500 ">registration status</th>
+            <th className="py-3 px-4 border-dashed border-blue-500 ">Refferal Dates</th>
+            <th className="py-3 px-4 border-dashed border-blue-500 ">Gender</th>
+            <th className="py-3 px-4 border-dashed border-blue-500 ">Registration Status</th>
             <th className="py-3 px-4 border-dashed border-blue-500 ">action</th>
           </tr>
         </thead>
@@ -118,7 +118,7 @@ const ReferralRecords: React.FC = () => {
                   `}
                   style={{ borderRadius: '50%' }}
                   onClick={() =>
-                  setDropdownOpen(referral.id === dropdownOpenId ? null : referral.id)
+                  setDropdownOpenId(referral.id === dropdownOpenId ? null : referral.id)
                   }
                 >
                   <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

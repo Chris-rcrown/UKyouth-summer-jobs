@@ -11,6 +11,7 @@ import PswdSuccess from './authentication-pages/passwordUpdateSuccess';
 import Overview from './pages/overview';
 import ReferralRecords from './pages/referral-records/referrer-records';
 import RegistrationRecords from './pages/registration-records/registration-record';
+import RgstrnCompForm from './pages/registration-records/RgstrnCompForm';
 import UserMangement from './pages/user-mangement';
 import Profile from './pages/profile/profile';
 import StaffRecords from './pages/profile/staff-records';
@@ -35,6 +36,7 @@ function App() {
            <Route path='/referrer-records' element={<ReferralRecords />} />
            <Route path='/referral-form/:id' element={<ReferralForm />} />
            <Route path='/registration-records' element={<RegistrationRecords />} />
+           <Route path='/registration-form/:id' element={< RgstrnCompForm/>} />
            <Route path='/user-management' element={<UserMangement />} />
            <Route path='/profile' element={<Profile />} />
            <Route path='/staff-record' element={<StaffRecords />} />
