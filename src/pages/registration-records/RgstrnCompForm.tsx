@@ -34,7 +34,7 @@ const RgstrnCompForm: React.FC = () => {
             <div className="p-6 bg-gray-100 min-h-screen w-full">
                 <div className="bg-gray-100 shadow-md p-6 border-white rounded-2xl  mx-auto ">
             <div >
-                    <a href="/referrer-records" className="text-[#12BAE3] flex items-center gap-1">
+                    <a href="/registration-records" className="text-[#12BAE3] flex items-center gap-1">
                     <span>&lt;</span> Back
                     </a>
             </div>
