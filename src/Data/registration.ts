@@ -16,54 +16,6 @@ export interface FormField {
 export const registrants: Registrant[] = [
     {
         serialNumber: 1,
-        fullName: "John Dukes",
-        borough: "Manchester",
-        registrationDate: "Feb 26, 2025",
-        gender: "Male",
-        placementStatus: "Pending"
-    },
-    {
-        serialNumber: 2,
-        fullName: "James Hall",
-        borough: "Manchester",
-        registrationDate: "Feb 26, 2025",
-        gender: "Male",
-        placementStatus: "Pending"
-    },
-    {
-        serialNumber: 3,
-        fullName: "Kenneth Allen",
-        borough: "Manchester",
-        registrationDate: "Feb 26, 2025",
-        gender: "Male",
-        placementStatus: "Pending"
-    },
-    {
-        serialNumber: 4,
-        fullName: "Jerry Helfer",
-        borough: "Manchester",
-        registrationDate: "Feb 26, 2025",
-        gender: "Male",
-        placementStatus: "Pending"
-    },
-    {
-        serialNumber: 5,
-        fullName: "Frances Swann",
-        borough: "Manchester",
-        registrationDate: "Feb 26, 2025",
-        gender: "Male",
-        placementStatus: "Pending"
-    },
-    {
-        serialNumber: 6,
-        fullName: "Kurt Bates",
-        borough: "Manchester",
-        registrationDate: "Feb 26, 2025",
-        gender: "Male",
-        placementStatus: "Pending"
-    },
-    {
-        serialNumber: 7,
         fullName: "Katie Sims",
         borough: "Manchester",
         registrationDate: "Feb 26, 2025",
@@ -71,7 +23,31 @@ export const registrants: Registrant[] = [
         placementStatus: "Controlled Group"
     },
     {
-        serialNumber: 8,
+        serialNumber: 2,
+        fullName: "Frances Swann",
+        borough: "Manchester",
+        registrationDate: "Feb 26, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 3,
+        fullName: "Dennis Callis",
+        borough: "Manchester",
+        registrationDate: "Feb 26, 2025",
+        gender: "Male",
+        placementStatus: "Controlled Group"
+    },
+    {
+        serialNumber: 4,
+        fullName: "Kenneth Allen",
+        borough: "Manchester",
+        registrationDate: "Feb 26, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 5,
         fullName: "Daniel Hamilton",
         borough: "Manchester",
         registrationDate: "Feb 26, 2025",
@@ -79,7 +55,15 @@ export const registrants: Registrant[] = [
         placementStatus: "Controlled Group"
     },
     {
-        serialNumber: 9,
+        serialNumber: 6,
+        fullName: "Jerry Helfer",
+        borough: "Manchester",
+        registrationDate: "Feb 26, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 7,
         fullName: "Bradley Lawlor",
         borough: "Manchester",
         registrationDate: "Feb 26, 2025",
@@ -87,7 +71,15 @@ export const registrants: Registrant[] = [
         placementStatus: "Controlled Group"
     },
     {
-        serialNumber: 10,
+        serialNumber: 8,
+        fullName: "Kurt Bates",
+        borough: "Manchester",
+        registrationDate: "Feb 26, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 9,
         fullName: "Autumn Phillips",
         borough: "Manchester",
         registrationDate: "Feb 26, 2025",
@@ -95,12 +87,100 @@ export const registrants: Registrant[] = [
         placementStatus: "Controlled Group"
     },
     {
-        serialNumber: 11,
-        fullName: "Dennis Callis",
+        serialNumber: 10,
+        fullName: "James Hall",
         borough: "Manchester",
         registrationDate: "Feb 26, 2025",
         gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 11,
+        fullName: "John Dukes",
+        borough: "Manchester",
+        registrationDate: "Feb 26, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 12,
+        fullName: "Sophie Turner",
+        borough: "Liverpool",
+        registrationDate: "Feb 27, 2025",
+        gender: "Female",
         placementStatus: "Controlled Group"
+    },
+    {
+        serialNumber: 13,
+        fullName: "Michael Smith",
+        borough: "Liverpool",
+        registrationDate: "Feb 27, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 14,
+        fullName: "Emily Johnson",
+        borough: "Birmingham",
+        registrationDate: "Feb 28, 2025",
+        gender: "Female",
+        placementStatus: "Controlled Group"
+    },
+    {
+        serialNumber: 15,
+        fullName: "Oliver Brown",
+        borough: "Birmingham",
+        registrationDate: "Feb 28, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 16,
+        fullName: "Amelia Wilson",
+        borough: "Leeds",
+        registrationDate: "Mar 1, 2025",
+        gender: "Female",
+        placementStatus: "Controlled Group"
+    },
+    {
+        serialNumber: 17,
+        fullName: "Jack Taylor",
+        borough: "Leeds",
+        registrationDate: "Mar 1, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 18,
+        fullName: "Jessica Lee",
+        borough: "Sheffield",
+        registrationDate: "Mar 2, 2025",
+        gender: "Female",
+        placementStatus: "Controlled Group"
+    },
+    {
+        serialNumber: 19,
+        fullName: "George Harris",
+        borough: "Sheffield",
+        registrationDate: "Mar 2, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
+    },
+    {
+        serialNumber: 20,
+        fullName: "Grace Martin",
+        borough: "London",
+        registrationDate: "Mar 3, 2025",
+        gender: "Female",
+        placementStatus: "Controlled Group"
+    },
+    {
+        serialNumber: 21,
+        fullName: "Harry Clark",
+        borough: "London",
+        registrationDate: "Mar 3, 2025",
+        gender: "Male",
+        placementStatus: "Pending"
     }
 ];
 
