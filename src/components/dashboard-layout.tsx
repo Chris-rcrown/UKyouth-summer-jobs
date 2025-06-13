@@ -7,6 +7,7 @@ pageName: string;
 ldp?: string;
 showRegister?: boolean;
 children?: ReactNode;
+className?: string;
 }
 const UserName = localStorage.getItem('UserName') || 'User';
 const UserRrole = localStorage.getItem('UseRrole') || 'Role';
@@ -132,7 +133,7 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = ({
                         <div className="flex items-center space-x-4 mt-6">
                             <img src="/logout.svg" alt="logout icon" className="w-6 h-6" />
                             <button onClick={()=> {
-                                navigate('/logout')
+                                navigate('/sign-in')
                             }} className="text-white hover:underline cursor-pointer">
                                 Logout
                             </button>

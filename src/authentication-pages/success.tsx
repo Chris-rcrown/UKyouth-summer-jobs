@@ -8,7 +8,7 @@ const Success: React.FC = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       navigate('/overview', {replace: true});
-    }, 7000);
+    }, 3000);
 
     // Cleanup if the component unmounts before timeout
     return () => clearTimeout(timer);
