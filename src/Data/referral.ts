@@ -13,6 +13,18 @@ export const referrals: Referral[] = [
     { id: 1, fullName: 'David Eison', location: 'Manchester', referralDate: 'Feb 26, 2025', gender: 'Male', status: 'Registered' },
     { id: 2, fullName: 'Stephanie Nicol', location: 'Manchester', referralDate: 'Feb 26, 2025', gender: 'Male', status: 'Pending' },
     { id: 3, fullName: 'Alex Tester', location: 'Manchester', referralDate: 'Feb 26, 2025', gender: 'Male', status: 'Pending' },
+    { id: 4, fullName: 'Jessica Smith', location: 'London', referralDate: 'Mar 3, 2025', gender: 'Female', status: 'Registered' },
+    { id: 5, fullName: 'Mohammed Ali', location: 'Birmingham', referralDate: 'Mar 5, 2025', gender: 'Male', status: 'Pending' },
+    { id: 6, fullName: 'Emily Johnson', location: 'Leeds', referralDate: 'Mar 7, 2025', gender: 'Female', status: 'Registered' },
+    { id: 7, fullName: 'Chloe Brown', location: 'Liverpool', referralDate: 'Mar 10, 2025', gender: 'Female', status: 'Pending' },
+    { id: 8, fullName: 'Daniel Evans', location: 'Newcastle', referralDate: 'Mar 12, 2025', gender: 'Male', status: 'Registered' },
+    { id: 9, fullName: 'Sophie Green', location: 'Sheffield', referralDate: 'Mar 15, 2025', gender: 'Female', status: 'Pending' },
+    { id: 10, fullName: 'Lucas White', location: 'Bristol', referralDate: 'Mar 18, 2025', gender: 'Male', status: 'Registered' },
+    { id: 11, fullName: 'Olivia Harris', location: 'Manchester', referralDate: 'Mar 20, 2025', gender: 'Female', status: 'Pending' },
+    { id: 12, fullName: 'Ethan Walker', location: 'London', referralDate: 'Mar 22, 2025', gender: 'Male', status: 'Registered' },
+    { id: 13, fullName: 'Grace Hall', location: 'Leeds', referralDate: 'Mar 25, 2025', gender: 'Female', status: 'Pending' },
+    { id: 14, fullName: 'Mason King', location: 'Birmingham', referralDate: 'Mar 27, 2025', gender: 'Male', status: 'Registered' },
+    { id: 15, fullName: 'Isabella Wright', location: 'Liverpool', referralDate: 'Mar 30, 2025', gender: 'Female', status: 'Pending' },
 ];
 
 
