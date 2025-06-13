@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, } from 'react-router-dom';
-import { registrants } from '../../Data/registration';
-import { formQuestions } from '../../Data/referral'; 
+import { registrants,  FormField } from '../../Data/registration';
 import DashboardLayout from '../../components/dashboard-layout';
 import { FooterNavigation } from '../../components/button';
 
@@ -14,16 +13,17 @@ const RgstrnCompForm: React.FC = () => {
 
     // Define the question ranges for each page
     const pageRanges = [
-        { start: 0, end: 5 },    // Page 1: first 5 questions (0-4)
-        { start: 5, end: 13 },   // Page 2: next 8 questions (5-12)
-        { start: 13, end: 24 },  // Page 3: next 11 questions (13-23)
-        { start:24, end: 40},
-        { start: 40, end: formQuestions.length }, // Page 4: remaining questions (24+)
+        { start: 0, end: 2 },    // Page 1: first 5 questions (0-4)
+        { start: 2, end: 5 },   // Page 2: next 8 questions (5-12)
+        { start: 5, end: 20 },  // Page 3: next 11 questions (13-23)
+        { start:20, end: 30},
+        { start: 30, end: 36 },
+        {start:36 , end: FormField.length }, // Page 4: remaining questions (24+)
     ];
 
     const totalPages = pageRanges.length;
     const { start, end } = pageRanges[currentPage - 1];
-    const questionsToShow = formQuestions.slice(start, end);
+    const questionsToShow = FormField.slice(start, end);
 
     useEffect(() => {
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -79,7 +79,7 @@ const RgstrnCompForm: React.FC = () => {
             <div className="border-t border-gray-300 flex-1"></div>
             <div className={`flex flex-col items-center ${currentPage === 2 ? 'font-bold' : 'font-normal'}`}>
                 <div className={`w-8 h-8 rounded-full ${currentPage === 2 ? 'bg-[#12BAE3] text-white' : 'bg-gray-300 text-gray-700'} flex items-center justify-center`}>2</div>
-                <span className="text-sm text-gray-500 mt-2">Referral Details</span>
+                <span className="text-sm text-gray-500 mt-2">Survey</span>
             </div>
             <div className="border-t border-gray-300 flex-1"></div>
             <div className={`flex flex-col items-center ${currentPage === 3 ? 'font-bold' : 'font-normal'}`}>
@@ -94,16 +94,30 @@ const RgstrnCompForm: React.FC = () => {
             <div className="border-t border-gray-300 flex-1"></div>
             <div className={`flex flex-col items-center ${currentPage === 5 ? 'font-bold' : 'font-normal'}`}>
                 <div className={`w-8 h-8 rounded-full ${currentPage === 5 ? 'bg-[#12BAE3] text-white' : 'bg-gray-300 text-gray-700'} flex items-center justify-center`}>5</div>
-                <span className="text-sm text-gray-500 mt-2">Eligibility Status</span>
+                <span className="text-sm text-gray-500 mt-2">Payroll Content</span>
+            </div>
+            <div className="border-t border-gray-300 flex-1"></div>
+            <div className={`flex flex-col items-center ${currentPage === 6 ? 'font-bold' : 'font-normal'}`}>
+                <div className={`w-8 h-8 rounded-full ${currentPage === 6 ? 'bg-[#12BAE3] text-white' : 'bg-gray-300 text-gray-700'} flex items-center justify-center`}>6</div>
+                <span className="text-sm text-gray-500 mt-2">Eligibilty Status</span>
             </div>
         </div>
         <div className="space-y-4 bg-white px-3 py-3 rounded-2xl">
             {questionsToShow.map((question) => (
                 <div key={question.id} className="border-b border-gray-200 p-2">
-                    <p>{question.text}</p>
-                    {question.id === 5 ? (
-                        <input type="text" placeholder={`Answer: ${question.answer}`} className="w-full mt-2 p-2 border border-gray-300 rounded" />
+                    {question.id === 5 || question.id === 38 ? (
+                        <a
+                            href={question.label}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-600 underline"
+                        >
+                            {question.label}
+                        </a>
                     ) : (
+                        <p>{question.label}</p>
+                    )}
+                    {question.answer !== undefined && (
                         <label className="flex items-center gap-2 mt-2 text-gray-500">
                             <span>Answer: {question.answer}</span>
                         </label>
